@@ -271,7 +271,9 @@ class WebBaseLoader(BaseLoader):
                 "`parser` must be one of " + ", ".join(valid_parsers) + "."
             )
 
-    async def scrape_all(self, urls: List[str], parser: Union[str, None] = None) -> List[Any]:
+    async def scrape_all(
+        self, urls: List[str], parser: Union[str, None] = None
+    ) -> List[Any]:
         """Fetch all urls, then return soups for all results."""
         from bs4 import BeautifulSoup
 
