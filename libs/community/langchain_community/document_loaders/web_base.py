@@ -351,24 +351,34 @@ class WebBaseLoader(BaseLoader):
             metadata = _build_metadata(soup, path)
             yield Document(page_content=text, metadata=metadata)
 
-        # for path in self.web_paths:
-        #     soup = self._scrape(path, bs_kwargs=self.bs_kwargs)
-        #     text = soup.get_text(**self.bs_get_text_kwargs)
-        #     metadata = _build_metadata(soup, path)
-        #     yield Document(page_content=text, metadata=metadata)
-
     def aload(self) -> List[Document]:  # type: ignore
         """Load text from the urls in web_path async into Documents."""
 
-        return self.load()
-        # results = asyncio.run(self.ascrape_all(self.web_paths))
-        # docs = []
-        # for path, soup in zip(self.web_paths, results):
-        #     text = soup.get_text(**self.bs_get_text_kwargs)
-        #     metadata = _build_metadata(soup, path)
-        #     docs.append(Document(page_content=text, metadata=metadata))
+        logger.warning("""BREAKING CHANGE
 
-        # return docs
+Starting with the next major version, the aload() function will introduce a breaking change by transitioning from a synchronous function to an asynchronous one.
+To prepare for this change, avoid using aload() as shown below:
+
+    docs: List[Document] = aload()
+
+Instead, update your code in one of the following ways:
+    1. If you need a synchronous alternative with performance similar to aload(), use load():
+
+        docs: List[Document] = load()
+
+    2. If you want to use an asynchronous function before the major update, use alazy_load():
+
+        docs: List[Document] = []
+        async for doc in alazy_load():
+            docs.append(doc)
+
+After the major version update, both alazy_load() and aload() will support asynchronous usage.
+For a more concise approach, you can use:
+
+    docs: List[Document] = await aload()
+        """)
+
+        return self.load()
 
     async def alazy_load(self) -> AsyncIterator[Document]:
         """A lazy loader for Documents."""
