@@ -356,23 +356,27 @@ class WebBaseLoader(BaseLoader):
 
         logger.warning("""BREAKING CHANGE
 
-Starting with the next major version, the aload() function will introduce a breaking change by transitioning from a synchronous function to an asynchronous one.
+Starting with the next major version, the aload() function will introduce a \
+breaking change by transitioning from a synchronous function to an asynchronous one.
 To prepare for this change, avoid using aload() as shown below:
 
     docs: List[Document] = aload()
 
 Instead, update your code in one of the following ways:
-    1. If you need a synchronous alternative with performance similar to aload(), use load():
+    1. If you need a synchronous alternative with performance similar to aload(), \
+use load():
 
         docs: List[Document] = load()
 
-    2. If you want to use an asynchronous function before the major update, use alazy_load():
+    2. If you want to use an asynchronous function before the major update, \
+use alazy_load():
 
         docs: List[Document] = []
         async for doc in alazy_load():
             docs.append(doc)
 
-After the major version update, both alazy_load() and aload() will support asynchronous usage.
+After the major version update, \
+both alazy_load() and aload() will support asynchronous usage.
 For a more concise approach, you can use:
 
     docs: List[Document] = await aload()
