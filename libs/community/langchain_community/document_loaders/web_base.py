@@ -339,15 +339,15 @@ class WebBaseLoader(BaseLoader):
             # in a seperate loop, in a seperate thread.
             with ThreadPoolExecutor(max_workers=1) as executor:
                 future: Future[List[str]] = executor.submit(
-                    asyncio.run, # type: ignore[arg-type]
-                    self.ascrape_all(self.web_paths), # type: ignore[arg-type]
+                    asyncio.run,  # type: ignore[arg-type]
+                    self.ascrape_all(self.web_paths),  # type: ignore[arg-type]
                 )
                 results = future.result()
         except RuntimeError:
             results = asyncio.run(self.ascrape_all(self.web_paths))
-        
+
         for path, soup in zip(self.web_paths, results):
-            text = soup.get_text(**self.bs_get_text_kwargs)
+            text = soup.get_text(**self.bs_get_text_kwargs) # type: ignore
             metadata = _build_metadata(soup, path)
             yield Document(page_content=text, metadata=metadata)
 

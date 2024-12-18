@@ -28,9 +28,9 @@ class TestWebBaseLoader:
 @pytest.mark.requires("bs4")
 @patch("aiohttp.ClientSession.get")
 def test_lazy_load(mock_get: Any) -> None:
-
     async def mock_text() -> str:
         return "<html><body><p>Test content</p></body></html>"
+
     import bs4
 
     mock_response = MagicMock()
@@ -44,7 +44,7 @@ def test_lazy_load(mock_get: Any) -> None:
     assert results[0].page_content == "Test content"
 
     # Test bs4 kwargs
-    async def mock_text() -> str:
+    async def mock_text_bs4() -> str:
         return dedent("""
             <html>
             <body>
@@ -55,7 +55,7 @@ def test_lazy_load(mock_get: Any) -> None:
             """)
 
     mock_response = MagicMock()
-    mock_response.text = mock_text
+    mock_response.text = mock_text_bs4
     mock_get.return_value.__aenter__.return_value = mock_response
 
     loader = WebBaseLoader(
